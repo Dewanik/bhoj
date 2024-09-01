@@ -9,7 +9,7 @@
     "orientation": "portrait-primary",
     "icons": [
         {
-            "src": "/static/FFFFFF.png",
+            "src": "/static/css_img/cloche-0.png",
             "sizes": "192x192",
             "type": "image/png"
         }

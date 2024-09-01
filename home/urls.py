@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import views
+
 urlpatterns = [
-    path("",views.test)
+    path("",views.test),
+    path('api/adpages/', views.AdPageListView.as_view(), name='adpage-list'),
 ]

@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My PWA Django App</title>
+    <title>Bhoj App | Large Catering Sorted</title>
     <link rel="manifest" href="{% static 'manifest.json' %}">
-    <link rel="icon" href="{% static 'FFFFFF.png' %}">
-    
+    <link rel="icon" href="{% static 'css_img/cloche-0.png' %}">
+
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#000000">
     <meta name="description" content="A simple Progressive Web App built with Django">
@@ -23,14 +23,23 @@
             overflow: hidden;
         }
         
-        .fullscreen-media {
+        .media-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
             z-index: -1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black; /* Fallback color */
+        }
+
+        .fullscreen-media {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .interaction-buttons {
@@ -54,22 +63,177 @@
         .interaction-buttons button:hover {
             background-color: #f0f0f0;
         }
+
+        /* Cloche Icon */
+        .cloche-icon {
+            scale :3;
+            position: absolute;
+            top: 80px;
+            right: 80px; /* Positioned in the top right corner */
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+            filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)); /* Adds a subtle shadow */
+            opacity: 0.9; /* Slightly increase opacity for visibility */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Adds a stronger shadow */
+            border-radius: 50%; /* Rounds the corners for a more button-like effect */
+            padding: 5px; /* Adds some padding inside the icon */
+        }
+
+        /* Media query for smaller screens */
+        @media (max-width: 600px) {
+            .cloche-icon {
+                scale:2;
+                width: 40px;
+                height: 40px;
+                top: 30px;
+                right: 30px;
+            }
+        }
+
+        .cloche-icon:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Increase shadow on hover */
+        }
+
+        .cloche-icon:active {
+            transform: scale(1.1) rotate(10deg);
+            opacity: 0.8;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Slightly reduce shadow on click */
+        }
+
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <!-- Full-page image or video -->
-    <!-- To use an image, replace the <video> tag with <img src="{% static 'images/your-image.jpg' %}" class="fullscreen-media" alt="Full Page Image"> -->
-    <video autoplay muted loop class="fullscreen-media">
-        <source src="{% static 'videos/your-video.mp4' %}" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+    <!-- Cloche Icon -->
+    <img src="{% static 'css_img/cloche-0.png' %}" id="clocheIcon" class="cloche-icon" alt="Cloche Icon">
+
+    <!-- Media container to hold image or video -->
+    <div class="media-container">
+        <video autoplay muted loop playsinline class="fullscreen-media" id="media-element">
+            <source src="{% static 'videos/your-video.mp4' %}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
 
     <!-- Interactive buttons -->
-    <div class="interaction-buttons">
+    <div class="interaction-buttons" id="button-container">
         <!-- Add buttons as needed -->
         <button>Button 1</button>
         <button>Button 2</button>
         <button>Button 3</button>
     </div>
+
+    <script>
+        // JavaScript to ensure video plays automatically
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoElement = document.getElementById('media-element');
+            videoElement.play().catch(function(error) {
+                console.log('Autoplay prevented:', error);
+                // If autoplay is prevented, you can prompt the user or take some other action
+            });
+        });
+
+        // JavaScript to handle cloche icon hover and click events
+        const clocheIcon = document.getElementById('clocheIcon');
+        clocheIcon.addEventListener('mouseover', function() {
+            this.src = "{% static 'css_img/cloche-1.png' %}";
+        });
+
+        clocheIcon.addEventListener('mouseout', function() {
+            this.src = "{% static 'css_img/cloche-0.png' %}";
+        });
+
+        clocheIcon.addEventListener('click', function(event) {
+            this.src = "{% static 'css_img/cloche-1.png' %}";
+            event.stopPropagation(); // Prevents the click from triggering the document event
+        });
+
+        // Event listener to revert icon when clicking outside of it
+        document.addEventListener('click', function(event) {
+            if (!clocheIcon.contains(event.target)) {
+                clocheIcon.src = "{% static 'css_img/cloche-0.png' %}";
+            }
+        });
+
+        async function fetchAdPages() {
+            try {
+                const response = await axios.get('/api/adpages/');
+                const adPages = response.data;
+                updateSlideshow(adPages);
+            } catch (error) {
+                console.error('Error fetching ad pages:', error);
+            }
+        }
+
+        function updateSlideshow(adPages) {
+            const mediaContainer = document.querySelector('.media-container');
+            const interactionButtons = document.getElementById('button-container');
+            
+            let currentIndex = 0;
+
+            function displayAd(index) {
+                const adPage = adPages[index];
+                
+                // Clear the current media element
+                while (mediaContainer.firstChild) {
+                    mediaContainer.removeChild(mediaContainer.firstChild);
+                }
+
+                // Display media based on its type
+                if (adPage.media_type === 'i') {
+                    // Remove 'home' from the path
+                    const imgSrc = adPage.img.replace('/home', '');
+                    const imgElement = document.createElement('img');
+                    imgElement.src = imgSrc;
+                    imgElement.className = 'fullscreen-media';
+                    imgElement.alt = adPage.title;
+                    imgElement.id = 'media-element';
+                    mediaContainer.appendChild(imgElement);
+                } else if (adPage.media_type === 'v') {
+                    // Remove 'home' from the path
+                    const videoSrc = adPage.img.replace('/home', '');
+                    const videoElement = document.createElement('video');
+                    videoElement.autoplay = true;
+                    videoElement.muted = true;
+                    videoElement.loop = true;
+                    videoElement.className = 'fullscreen-media';
+                    videoElement.id = 'media-element';
+
+                    const sourceElement = document.createElement('source');
+                    sourceElement.src = videoSrc;
+                    sourceElement.type = 'video/mp4';
+
+                    videoElement.appendChild(sourceElement);
+                    mediaContainer.appendChild(videoElement);
+                }
+
+                // Optionally, add buttons if needed
+                if (adPage.buttons) {
+                    interactionButtons.innerHTML = `
+                        <button>Button 1</button>
+                        <button>Button 2</button>
+                        <button>Button 3</button>`;
+                } else {
+                    interactionButtons.innerHTML = ''; // Clear buttons if not needed
+                }
+            }
+            
+            // Initial display
+            displayAd(currentIndex);
+
+            // Slideshow effect
+            setInterval(() => {
+                currentIndex = (currentIndex + 1) % adPages.length;
+                displayAd(currentIndex);
+            }, 5000); // Switch every 5 seconds
+        }
+    
+        // Fetch and update ad pages every 1 minute
+        setInterval(fetchAdPages, 60000);
+        fetchAdPages(); // Initial fetch on page load
+    </script>
 </body>
 </html>

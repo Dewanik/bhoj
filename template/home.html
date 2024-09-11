@@ -149,6 +149,11 @@
         clocheIcon.addEventListener('click', function(event) {
             this.src = "{% static 'css_img/cloche-1.png' %}";
             event.stopPropagation(); // Prevents the click from triggering the document event
+
+            // Delay the redirection to "caterers" page to simulate the animation
+            setTimeout(function() {
+                window.location.href = "/caterers";
+            }, 500); // Adjust the delay as needed for the animation
         });
 
         // Event listener to revert icon when clicking outside of it

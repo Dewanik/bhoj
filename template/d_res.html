@@ -1,0 +1,150 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Page</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f3f4f6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        nav {
+            width: 100%;
+            background-color: #ff9800;
+            padding: 20px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .navbar-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            padding: 20px;
+            width: 80%;
+            max-width: 1000px;
+            text-align: center;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+
+        .restaurant-image {
+            width: 100%;
+            height: 200px; /* Adjust to the minimum */
+            max-height: 300px; /* Ensure it doesn't exceed this */
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .ratings-testimonials {
+            font-size: 18px;
+            color: #ff9800;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .rating {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .rating-star {
+            width: 30px;
+            height: 30px;
+            background-color: #ff9800;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            margin-right: 5px;
+        }
+
+        .testimonial {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .about {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .menu-button {
+            background-color: #ff9800;
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+
+        .menu-button:hover {
+            background-color: #ffe0b2;
+        }
+
+        .footer {
+            margin-top: auto;
+            padding: 20px;
+            background-color: #ff9800;
+            color: #fff;
+            text-align: center;
+            width: 100%;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="navbar-title">Let's Bhoj @ D_NAME</div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <img class="restaurant-image" src="{% static 'images/placeholder.jpg' %}" alt="Restaurant Image">
+        <div class="ratings-testimonials">Ratings / Testimonials</div>
+        <div class="rating">
+            <div class="rating-star"></div>
+            <div class="rating-star"></div>
+            <div class="rating-star"></div>
+            <div class="rating-star"></div>
+            <div class="rating-star"></div>
+        </div>
+        <div class="testimonial">
+            "The food was excellent and the delivery was on time. Highly recommended!" 
+            <br>
+            - Customer
+        </div>
+        <div class="about">
+            This restaurant offers a variety of dishes perfect for catering large events, with delicious options to suit all tastes.
+        </div>
+        <button class="menu-button">SEE MENU</button>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        © 2024 Let's Bhoj. All rights reserved.
+    </div>
+
+</body>
+</html>
